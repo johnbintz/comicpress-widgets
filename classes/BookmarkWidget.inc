@@ -44,6 +44,17 @@ class ComicPressBookmarkWidget extends WP_Widget {
 				)
 			)
 		);
+
+		$this->default_instance = array(
+			'title' => __('Bookmark This Page', 'comicpress'),
+			'mode' => array_shift(array_keys($this->text_fields))
+		);
+
+		foreach (array_values($this->text_fields) as $fields) {
+			foreach ($fields as $field => $info) {
+				$this->default_instance[$field] = $info['default'];
+			}
+		}
 	}
 
   function init() {}
@@ -69,17 +80,7 @@ class ComicPressBookmarkWidget extends WP_Widget {
   // @codeCoverageIgnoreEnd
 
   function form($instance) {
-  	$instance = (array)$instance;
-
-  	$defaults = array('title' => '', 'mode' => 'three-button');
-
-  	foreach (array_values($this->text_fields) as $field => $info) {
-  		if (isset($info['default'])) {
-  			$defaults[$field] = $info['default'];
-  		}
-  	}
-
-  	$instance = array_merge($defaults, $instance); ?>
+  	$instance = array_merge($this->default_instance, (array)$instance); ?>
   	<div id="<?php echo $this->get_field_id('wrapper') ?>">
   		<p>
   		  <label><?php _e('Title', 'comicpress') ?><br />
@@ -137,7 +138,7 @@ class ComicPressBookmarkWidget extends WP_Widget {
   <?php }
 
   function update($new_instance, $old_instance) {
-  	$instance = array();
+  	$instance = $this->default_instance;
 
   	$all_text_fields = array('title');
   	foreach ($this->text_fields as $type => $fields) {
@@ -145,13 +146,15 @@ class ComicPressBookmarkWidget extends WP_Widget {
   	}
 
 		foreach ($all_text_fields as $key) {
-			$instance[$key] = strip_tags($new_instance[$key]);
+			if (isset($new_instance[$key])) {
+				$instance[$key] = strip_tags($new_instance[$key]);
+			}
 		}
 
-		if (isset($this->text_fields[$new_instance['mode']])) {
-			$instance['mode'] = $new_instance['mode'];
-		} else {
-			$instance['mode'] = array_shift(array_keys($this->text_fields));
+		if (isset($new_instance['mode'])) {
+			if (isset($this->text_fields[$new_instance['mode']])) {
+				$instance['mode'] = $new_instance['mode'];
+			}
 		}
 
 		return $instance;

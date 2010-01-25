@@ -15,7 +15,7 @@ class BookmarkWidgetTest extends PHPUnit_Framework_TestCase {
 				array(), array(
 					'//input[contains(@name, "mode") and @value="three-button" and @checked]' => true,
 					'//input[contains(@name, "mode") and @value="one-button" and not(@checked)]' => true,
-				'//input[contains(@name, "title") and @value=""]' => true,
+				'//input[contains(@name, "title") and @value="Bookmark This Page"]' => true,
 				),
 			),
 			array(
@@ -52,5 +52,31 @@ class BookmarkWidgetTest extends PHPUnit_Framework_TestCase {
 		foreach ($expected_additional_xpath as $xpath => $value) {
 			$this->assertTrue(_xpath_test($xml, $xpath, $value), $xpath);
 		}
+	}
+
+	function providerTestUpdate() {
+		return array(
+			array(
+				array(),
+				array()
+			),
+			array(
+				array('tag-page' => 'Test', 'title' => 'Test title', 'mode' => 'one-button'),
+				array('tag-page' => 'Test', 'title' => 'Test title', 'mode' => 'one-button')
+			),
+			array(
+				array('mode' => 'two-button'),
+				array('mode' => 'three-button')
+			),
+		);
+	}
+
+	/**
+	 * @dataProvider providerTestUpdate
+	 */
+	function testUpdate($update_array, $expected_instance_merge) {
+		$w = new ComicPressBookmarkWidget();
+
+		$this->assertEquals(array_merge($w->default_instance, $expected_instance_merge), $w->update($update_array, array()));
 	}
 }
