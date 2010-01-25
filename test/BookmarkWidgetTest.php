@@ -79,4 +79,74 @@ class BookmarkWidgetTest extends PHPUnit_Framework_TestCase {
 
 		$this->assertEquals(array_merge($w->default_instance, $expected_instance_merge), $w->update($update_array, array()));
 	}
+
+	function providerTestWidget() {
+		return array(
+			array(
+				array(
+					'title' => 'Title',
+					'mode'  => 'one-button',
+					'tag-page' => 'Tag page',
+					'bookmark-clicker-off' => 'Clicker off'
+				),
+				array(
+					'//p[text()="Title"]' => true,
+					'//div[@class="bookmark-widget"]/a[@class="bookmark-clicker"]' => true,
+					'//script[contains(text(), "tag-page")]' => false,
+					'//script[contains(text(), "bookmark-clicker-off")]' => true,
+					'//script[contains(text(), "Post url")]' => true,
+				)
+			),
+			array(
+				array(
+					'title' => 'Other Title',
+					'mode'  => 'three-button',
+					'tag-page' => 'Tag page',
+					'bookmark-clicker-off' => 'Clicker off'
+				),
+				array(
+					'//p[text()="Other Title"]' => true,
+					'//div[@class="bookmark-widget"]/a[@class="tag-page"]' => true,
+					'//script[contains(text(), "tag-page")]' => true,
+					'//script[contains(text(), "bookmark-clicker-off")]' => false,
+					'//script[contains(text(), "Blog url")]' => true,
+				),
+				true
+			),
+		);
+	}
+
+	/**
+	 * @dataProvider providerTestWidget
+	 */
+	function testWidget($instance, $expected_xpath, $is_home = false) {
+		global $post;
+
+		$post = (object)array(
+			'ID' => 1,
+			'guid' => 'Post url'
+		);
+
+		wp_insert_post($post);
+
+		$w = new ComicPressBookmarkWidget();
+
+		_set_bloginfo('url', 'Blog url');
+		_set_current_option('is_home', $is_home);
+
+		ob_start();
+		$w->widget(array(
+			'before_widget' => '',
+			'after_widget' => '',
+			'before_title' => '<p>',
+			'after_title' => '</p>'
+		), $instance);
+		$content = ob_get_clean();
+
+		$this->assertTrue(($xml = _to_xml($content, true)) !== false);
+
+		foreach ($expected_xpath as $xpath => $value) {
+			$this->assertTrue(_xpath_test($xml, $xpath, $value), $xpath);
+		}
+	}
 }

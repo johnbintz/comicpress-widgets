@@ -1,7 +1,7 @@
 <?php
 
 class ComicPressBookmarkWidget extends WP_Widget {
-	var $text_fields;
+	var $text_fields, $default_instance;
 
 	// @codeCoverageIgnoreStart
 	function ComicPressBookmarkWidget($skip_widget_init = false) {
@@ -164,12 +164,15 @@ class ComicPressBookmarkWidget extends WP_Widget {
   	global $post;
   	extract($args, EXTR_SKIP);
 
+  	$instance = (array)$instance;
+  	$instance = array_merge($this->default_instance, $instance);
+
 		echo $before_widget;
 
 		$title = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
 		if (!empty($title)) { echo $before_title . $title . $after_title; };
 
-		$mode = !isset($this->text_fields[$instance['mode']]) ? array_shift(array_keys($this->text_fields)) : $instance['mode'];
+		$mode = $instance['mode'];
 
 		$link = is_home() ? get_bloginfo('url') : get_permalink($post);
 
