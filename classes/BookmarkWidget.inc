@@ -80,53 +80,52 @@ class ComicPressBookmarkWidget extends WP_Widget {
   		           name="<?php echo $this->get_field_name('title') ?>"
   		           value="<?php echo esc_attr($instance['title']) ?>" />
   		  </label>
-  		</p>
-  	<?php
-  	foreach (array(
-  		'three-button' => __('Three-button mode', 'comicpress'),
-  		'one-button' => __('One-button mode', 'comicpress')
-  	) as $mode => $label) { ?>
-  		<p>
-  		  <label>
-  		    <input type="radio"
-  		    			 id="<?php echo $this->get_field_id($mode) ?>"
-  		           name="<?php echo $this->get_field_name('mode') ?>"
-  		           value="<?php echo esc_attr($mode) ?>"
-  		           <?php echo $instance['mode'] == $mode ? 'checked="checked"' : '' ?> /> <?php echo $label ?>
-  		  </label>
-  		</p>
-  		<div id="<?php echo $this->get_field_id("${mode}-options") ?>"><p>
-				<?php
-					foreach ($this->text_fields[$mode] as $name => $info) {
-						extract($info);
-						$value = empty($instance[$name]) ? $default : $instance[$name];
-						?>
-							<label><?php echo $label ?><br />
-								<input class="widefat" type="text"
-								       name="<?php echo $this->get_field_name($name) ?>"
-								       value="<?php echo esc_attr($value) ?>" />
-							</label>
-						<br /><?php
-					}
-				?>
-  		</p></div>
-  	<?php } ?>
+	  	</p>
+	  	<?php
+	  	foreach (array(
+	  		'three-button' => __('Three-button mode', 'comicpress'),
+	  		'one-button' => __('One-button mode', 'comicpress')
+	  	) as $mode => $label) { ?>
+	  		<p>
+	  		  <label>
+	  		    <input type="radio"
+	  		    			 id="<?php echo $this->get_field_id($mode) ?>"
+	  		           name="<?php echo $this->get_field_name('mode') ?>"
+	  		           value="<?php echo esc_attr($mode) ?>"
+	  		           <?php echo $instance['mode'] == $mode ? 'checked="checked"' : '' ?> /> <?php echo $label ?>
+	  		  </label>
+	  		</p>
+	  		<div id="<?php echo $this->get_field_id("${mode}-options") ?>"><p>
+					<?php
+						foreach ($this->text_fields[$mode] as $name => $info) {
+							extract($info);
+							$value = empty($instance[$name]) ? $default : $instance[$name];
+							?>
+								<label><?php echo $label ?><br />
+									<input class="widefat" type="text"
+									       name="<?php echo $this->get_field_name($name) ?>"
+									       value="<?php echo esc_attr($value) ?>" />
+								</label>
+							<br /><?php
+						}
+					?>
+	  		</p></div>
+	  	<?php } ?>
+	  	<script type="text/javascript">
+				(function($) {
+					var wrapper = '<?php echo $this->get_field_id('wrapper') ?>';
+					var radios = $('#' + wrapper + ' input[type=radio]');
+
+					var show = function() {
+						radios.each(function() {
+							$('#' + this.id + '-options')[this.checked ? 'show' : 'hide']();
+						});
+					};
+					radios.click(show);
+					show();
+				}(jQuery));
+	  	</script>
   	</div>
-  	<script type="text/javascript">
-			(function($) {
-				var wrapper = '<?php echo $this->get_field_id('wrapper') ?>';
-				var radios = $('#' + wrapper + ' input[type=radio]');
-
-				var show = function() {
-					radios.each(function() {
-						$('#' + this.id + '-options')[this.checked ? 'show' : 'hide']();
-					});
-				};
-
-				radios.click(show);
-				show();
-			}(jQuery));
-  	</script>
   <?php }
 
   function update($new_instance, $old_instance) {
