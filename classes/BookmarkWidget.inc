@@ -111,20 +111,6 @@ class ComicPressBookmarkWidget extends WP_Widget {
 					?>
 	  		</p></div>
 	  	<?php } ?>
-	  	<script type="text/javascript">
-				(function($) {
-					var wrapper = '<?php echo $this->get_field_id('wrapper') ?>';
-					var radios = $('#' + wrapper + ' input[type=radio]');
-
-					var show = function() {
-						radios.each(function() {
-							$('#' + this.id + '-options')[this.checked ? 'show' : 'hide']();
-						});
-					};
-					radios.click(show);
-					show();
-				}(jQuery));
-	  	</script>
   	</div>
   <?php }
 
