@@ -40,24 +40,12 @@ class ComicPressWidgets {
 						$widget->init();
 					}
 
-					$available_widgets[strtolower($class_name)] = $widget;
-				}
-			}
-			closedir($dh);
-		}
-
-		foreach (wp_get_sidebars_widgets() as $type => $widgets) {
-			if ($type != 'wp_inactive_widgets') {
-				foreach ($widgets as $widget_id) {
-					foreach ($available_widgets as $key => $widget) {
-						if (method_exists($widget, 'is_active')) {
-							if (strpos(strtolower($widget_id), $key) === 0) {
-								$widget->is_active();
-							}
-						}
+					if (is_active_widget(false, false, strtolower($class_name))) {
+						$widget->is_active();
 					}
 				}
 			}
+			closedir($dh);
 		}
 	}
 }
