@@ -91,7 +91,7 @@ class BookmarkWidgetTest extends PHPUnit_Framework_TestCase {
 				),
 				array(
 					'//p[text()="Title"]' => true,
-					'//div[@class="bookmark-widget"]/a[@class="bookmark-clicker"]' => true,
+					'//div[@class="bookmark-widget one-button"]/a[@class="bookmark-clicker"]' => true,
 					'//script[contains(text(), "tag-page")]' => false,
 					'//script[contains(text(), "bookmark-clicker-off")]' => true,
 					'//script[contains(text(), "Post url")]' => true,
@@ -106,7 +106,7 @@ class BookmarkWidgetTest extends PHPUnit_Framework_TestCase {
 				),
 				array(
 					'//p[text()="Other Title"]' => true,
-					'//div[@class="bookmark-widget"]/a[@class="tag-page"]' => true,
+					'//div[@class="bookmark-widget three-button"]/a[@class="tag-page"]' => true,
 					'//script[contains(text(), "tag-page")]' => true,
 					'//script[contains(text(), "bookmark-clicker-off")]' => false,
 					'//script[contains(text(), "Blog url")]' => true,

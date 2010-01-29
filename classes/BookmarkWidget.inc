@@ -156,14 +156,14 @@ class ComicPressBookmarkWidget extends WP_Widget {
   	$id = 'comic-bookmark-' . md5(rand());
     switch ($instance['mode']) {
       case 'three-button': ?>
-		    <div class="bookmark-widget" id="<?php echo $id ?>">
+		    <div class="bookmark-widget three-button" id="<?php echo $id ?>">
       		<a href="#" class="tag-page"></a>
       		<a href="#" class="goto-tag"></a>
       		<a href="#" class="clear-tag"></a>
       	</div>
 				<?php break;
 			case 'one-button': ?>
-		    <div class="bookmark-widget" id="<?php echo $id ?>">
+		    <div class="bookmark-widget one-button" id="<?php echo $id ?>">
       		<a href="#" class="bookmark-clicker"></a>
       	</div>
 				<?php break;
